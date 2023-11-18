@@ -20,7 +20,6 @@ app.use((req, res, next) => {
 	}
 });
 */
-
 app.get("/api", (req, res) => {
 	res.json({ message: "Hello from server!" });
 });
@@ -31,11 +30,6 @@ app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
-/*
-app.get("/home", (req, res) => {
-	res.json({ message: "Hello World!" });
-});
-*/
 app.listen(PORT, () => {
 	console.log(`Server listening on ${PORT}`);
 	console.log("Press Ctrl+C to quit.");

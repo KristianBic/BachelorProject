@@ -3,6 +3,7 @@ import { useRef, useState, useEffect, useContext } from "react";
 import { USER_REGEX, PWD_REGEX } from "./Regex";
 import AuthContext from "../../auth/AuthProvider";
 import { Navigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const Login = () => {
 	const userRef = useRef();
@@ -42,6 +43,10 @@ const Login = () => {
 
 	return (
 		<>
+			<Helmet>
+				<title>Login</title>
+				<meta name="description" content="This page explains everything about our react app." />
+			</Helmet>
 			{success ? (
 				<section>
 					<Navigate to="/nastavenia" />
