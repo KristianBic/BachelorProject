@@ -8,6 +8,7 @@ const app = express();
 // This code makes sure that any request that does not matches a static file
 // in the build folder, will just serve index.html. Client side routing is
 // going to make sure that the correct content will be loaded.
+/*
 app.use((req, res, next) => {
 	if (/(.ico|.js|.css|.jpg|.png|.map)$/i.test(req.path)) {
 		next();
@@ -18,8 +19,16 @@ app.use((req, res, next) => {
 		res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 	}
 });
-
+*/
 app.use(express.static(path.join(__dirname, "../client/build"))); //Updating the Node.js runtime to serve the React App
+
+app.get("/api", (req, res) => {
+	res.json({ message: "Hello from server!" });
+});
+
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
 
 /*
 app.get("/home", (req, res) => {
