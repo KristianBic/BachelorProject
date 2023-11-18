@@ -20,11 +20,12 @@ app.use((req, res, next) => {
 	}
 });
 */
-app.use(express.static(path.join(__dirname, "../client/build"))); //Updating the Node.js runtime to serve the React App
 
 app.get("/api", (req, res) => {
 	res.json({ message: "Hello from server!" });
 });
+
+app.use(express.static(path.join(__dirname, "../client/build"))); //Updating the Node.js runtime to serve the React App
 
 app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "../client/build/index.html"));
