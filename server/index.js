@@ -3,6 +3,7 @@ const express = require("express");
 const PORT = process.env.PORT || 8080;
 const path = require("path");
 const app = express();
+const tf = require("@tensorflow/tfjs-node");
 
 //aby ked prepiname medzi /home /about ... aby to fungovalo s reactom
 // This code makes sure that any request that does not matches a static file
