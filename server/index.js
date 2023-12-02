@@ -7,6 +7,8 @@ const apiRoutes = require("./routes/api");
 const cors = require("cors");
 const multer = require("multer");
 const tf = require("@tensorflow/tfjs-node");
+const tf1 = require("@tensorflow/tfjs-node");
+
 const { createCanvas, loadImage } = require("canvas");
 const { loadLayersModel } = require("@tensorflow/tfjs-node");
 const fs = require("fs").promises;
@@ -20,13 +22,18 @@ app.use(bodyParser.json());
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-let model;
+//https://raw.githubusercontent.com/hugozanini/TFJS-object-detection/master/models/kangaroo-detector/model.json
+
+let model; // Define model globally
 
 const loadModel = async () => {
 	try {
-		const modelUrl = "https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/2";
-		model = await tfconv.loadGraphModel(modelUrl, { fromTFHub: true });
+		// Load a pre-trained object detection model (EfficientDet)
+		model = await tfconv.loadGraphModel(
+			"https://raw.githubusercontent.com/hugozanini/TFJS-object-detection/master/models/kangaroo-detector/model.json"
+		);
 		console.log("Model loaded successfully");
+		return model;
 	} catch (error) {
 		console.error("Error loading the model:", error);
 	}
@@ -49,34 +56,23 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 		ctx.drawImage(img, 0, 0);
 
 		// Convert the image to a TensorFlow tensor
-		const tensor = tf.browser.fromPixels(canvas).resizeNearestNeighbor([224, 224]).expandDims();
+		const tensor = tf.browser.fromPixels(canvas).expandDims();
 
-		// Preprocess the image (normalize pixel values)
-		const meanImageNetRGB = tf.tensor1d([123.68, 116.779, 103.939]);
-		const processedTensor = tensor.sub(meanImageNetRGB).div(255);
-
-		// Perform image classification using MobileNetV2
+		// Perform object detection using the loaded model
 		if (!model) {
 			console.error("Model is not loaded");
 			res.status(500).json({ success: false, message: "Error identifying object" });
 			return;
 		}
 
-		const predictions = model.predict(processedTensor);
+		// Perform object detection using the executeAsync() method
+		const predictions = await model.executeAsync(tensor);
 
-		// Get the top 3 predictions
-		const topPredictions = Array.from(predictions.dataSync())
-			.map((probability, index) => ({ class: index, probability }))
-			.sort((a, b) => b.probability - a.probability)
-			.slice(0, 3);
+		// Log the object detection results
+		console.log(predictions);
 
-		// Log the top predictions
-		console.log(topPredictions);
-
-		// Send a response with the top predictions
-		res.json({ success: true, predictions: topPredictions });
-
-		// Perform image classification using MobileNetV2
+		// Send a response with the object detection results
+		res.json({ success: true, predictions });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ success: false, message: "Error identifying object" });
