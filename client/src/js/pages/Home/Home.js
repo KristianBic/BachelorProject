@@ -10,6 +10,7 @@ const Home = () => {
 		const file = e.target.files[0];
 		setImage(file);
 	};
+
 	const handleImageSubmit = async () => {
 		try {
 			if (!image) {
@@ -20,36 +21,46 @@ const Home = () => {
 			const formData = new FormData();
 			formData.append("image", image);
 
-			const response = await fetch("/api/identify-object", {
-				method: "POST",
-				body: formData,
+			const response = await axios.post("/api/identify-object", formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
 			});
 
-			const data = await response.json();
+			const data = response.data;
+			console.log(data); // Log the response to the console for debugging
+
+			// Update state with the predictions
 			setPredictions(data.predictions || []);
 		} catch (error) {
 			console.error(error);
 		}
 	};
+
 	return (
 		<div>
 			<Helmet>
 				<title>Home</title>
 				<meta name="description" content="This page explains everything about our react app." />
 			</Helmet>
-			<h1>Home Pageee</h1>
+			<h1>Home Page</h1>
 
-			<h1>Image Classification</h1>
+			<h1>Object Detection</h1>
 			<input type="file" accept="image/*" onChange={handleImageChange} />
-			<button onClick={handleImageSubmit}>Classify Image</button>
+			<button onClick={handleImageSubmit}>Detect Objects</button>
 
 			{predictions.length > 0 && (
 				<div>
-					<h2>Predictions:</h2>
+					<h2>Detection Results:</h2>
 					<ul>
 						{predictions.map((prediction, index) => (
 							<li key={index}>
-								Class {prediction.class}: {Number(prediction.probability).toFixed(4)}
+								Object {index + 1}:<br />
+								BoundingBox: {prediction[0] ? prediction[0].join(", ") : "N/A"}
+								<br />
+								Score: {Number(prediction["scopeId"]).toFixed(4)}
+								<br />
+								Class Index: {prediction["id"]}
 							</li>
 						))}
 					</ul>
@@ -58,4 +69,5 @@ const Home = () => {
 		</div>
 	);
 };
+
 export default Home;
