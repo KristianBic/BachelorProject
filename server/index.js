@@ -29,9 +29,8 @@ let model; // Define model globally
 const loadModel = async () => {
 	try {
 		// Load a pre-trained object detection model (EfficientDet)
-		model = await tfconv.loadGraphModel(
-			"https://raw.githubusercontent.com/hugozanini/TFJS-object-detection/master/models/kangaroo-detector/model.json"
-		);
+		model = await tfconv.loadGraphModel("file://./models/model/model.json");
+
 		console.log("Model loaded successfully");
 		return model;
 	} catch (error) {
@@ -58,6 +57,8 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 		// Convert the image to a TensorFlow tensor
 		const tensor = tf.browser.fromPixels(canvas).expandDims();
 
+		const resizedTensor = tf.image.resizeBilinear(tensor, [416, 416]);
+
 		// Perform object detection using the loaded model
 		if (!model) {
 			console.error("Model is not loaded");
@@ -66,11 +67,10 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 		}
 
 		// Perform object detection using the executeAsync() method
-		const predictions = await model.executeAsync(tensor);
+		const predictions = await model.executeAsync(resizedTensor);
 
 		// Log the object detection results
 		console.log(predictions);
-
 		// Send a response with the object detection results
 		res.json({ success: true, predictions });
 	} catch (error) {
