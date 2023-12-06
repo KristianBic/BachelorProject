@@ -69,10 +69,12 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 		// Perform object detection using the executeAsync() method
 		const predictions = await model.executeAsync(resizedTensor);
 
-		// Log the object detection results
-		console.log(predictions);
-		// Send a response with the object detection results
-		res.json({ success: true, predictions });
+		const predictionsData = await predictions.array();
+		const boundingBoxes = predictionsData[0][0]; // Adjust based on the model's output structure
+
+		//console.log(boundingBoxes);
+
+		res.json({ success: true, boundingBoxes });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ success: false, message: "Error identifying object" });

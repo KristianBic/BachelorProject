@@ -9,6 +9,7 @@ const Home = () => {
 	const handleImageChange = (e) => {
 		const file = e.target.files[0];
 		setImage(file);
+		setPredictions([]); // Clear previous predictions when a new image is selected
 	};
 
 	const handleImageSubmit = async () => {
@@ -31,10 +32,34 @@ const Home = () => {
 			console.log(data); // Log the response to the console for debugging
 
 			// Update state with the predictions
-			setPredictions(data.predictions || []);
+			setPredictions(data.boundingBoxes || []);
 		} catch (error) {
 			console.error(error);
 		}
+	};
+
+	const renderBoundingBoxes = () => {
+		if (!predictions || !Array.isArray(predictions) || predictions.length === 0) {
+			return null; // No predictions to render
+		}
+
+		return (
+			<div style={{ position: "relative", width: "300px" }}>
+				{predictions.map((box, index) => {
+					const [x, y, width, height] = box;
+					const boundingBoxStyle = {
+						position: "absolute",
+						border: "2px solid red",
+						left: `${x * 100}%`,
+						top: `${y * 100}%`,
+						width: `${width * 100}%`,
+						height: `${height * 100}%`,
+					};
+
+					return <div key={index} style={boundingBoxStyle}></div>;
+				})}
+			</div>
+		);
 	};
 
 	return (
@@ -49,18 +74,22 @@ const Home = () => {
 			<input type="file" accept="image/*" onChange={handleImageChange} />
 			<button onClick={handleImageSubmit}>Detect Objects</button>
 
+			{image && (
+				<div>
+					<h2>Selected Image:</h2>
+					<img src={URL.createObjectURL(image)} alt="Selected" width="300" />
+					{renderBoundingBoxes()}
+				</div>
+			)}
+
 			{predictions.length > 0 && (
 				<div>
 					<h2>Detection Results:</h2>
 					<ul>
-						{predictions.map((prediction, index) => (
+						{predictions.map((boxes, index) => (
 							<li key={index}>
 								Object {index + 1}:<br />
-								BoundingBox: {prediction[0] ? prediction[0].join(", ") : "N/A"}
-								<br />
-								Score: {Number(prediction["scopeId"]).toFixed(4)}
-								<br />
-								Class Index: {prediction["id"]}
+								BoundingBox: {boxes.map((coord) => coord).join(" | ")}
 							</li>
 						))}
 					</ul>
