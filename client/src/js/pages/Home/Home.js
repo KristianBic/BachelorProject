@@ -40,29 +40,35 @@ const Home = () => {
 	};
 
 	useEffect(() => {
-		if (predictions.length > 0 && canvasRef.current) {
+		if (predictions.length > 0 && canvasRef.current && image && image.complete) {
 			const canvas = canvasRef.current;
 			const ctx = canvas.getContext("2d");
+
+			// Ensure canvas dimensions match the image dimensions
+			canvas.width = image.width;
+			canvas.height = image.height;
 
 			// Clear previous drawings
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 			// Draw bounding boxes
 			predictions.forEach((bbox) => {
-				const [x, y, width, height] = bbox;
+				const [yMin, xMin, yMax, xMax] = bbox;
 
 				// Convert relative coordinates to absolute pixel values
-				const absX = x * canvas.width;
-				const absY = y * canvas.height;
-				const absWidth = width * canvas.width;
-				const absHeight = height * canvas.height;
+				const absX = xMin * image.width;
+				const absY = yMin * image.height;
+				const absWidth = (xMax - xMin) * image.width;
+				const absHeight = (yMax - yMin) * image.height;
 
+				// Draw bounding box directly on the image
 				ctx.strokeStyle = "red";
 				ctx.lineWidth = 2;
 				ctx.strokeRect(absX, absY, absWidth, absHeight);
 			});
+			console.log("Bounding Boxes:", predictions);
 		}
-	}, [predictions]);
+	}, [predictions, image]);
 
 	const renderBoundingBoxes = () => {
 		if (!predictions || !Array.isArray(predictions) || predictions.length === 0) {
@@ -70,12 +76,15 @@ const Home = () => {
 		}
 
 		return (
-			<canvas
-				ref={canvasRef}
-				width={image.width}
-				height={image.height}
-				style={{ border: "2px solid red", position: "relative", width: "300px" }}
-			></canvas>
+			<div style={{ position: "relative", display: "inline-block" }}>
+				<img src={URL.createObjectURL(image)} alt="Selected" width="300" style={{ display: "block" }} />
+				<canvas
+					ref={canvasRef}
+					width={image.width}
+					height={image.height}
+					style={{ position: "absolute", top: 0, left: 0, border: "2px solid red" }}
+				></canvas>
+			</div>
 		);
 	};
 
