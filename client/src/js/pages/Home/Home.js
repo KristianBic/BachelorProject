@@ -80,9 +80,9 @@ const Home = () => {
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 			// Draw bounding boxes
-			predictions.forEach((bbox) => {
+			predictions.forEach((bbox, index) => {
 				// Check if bbox is an array or a single value
-				const [yMin, xMin, yMax, xMax] = Array.isArray(bbox) ? bbox : [bbox];
+				const [yMin, xMin, yMax, xMax, confidence, className] = Array.isArray(bbox) ? bbox : [bbox];
 
 				// Convert relative coordinates to absolute pixel values
 				const absX = xMin * image.width;
@@ -94,8 +94,13 @@ const Home = () => {
 				ctx.strokeStyle = "red";
 				ctx.lineWidth = 2;
 				ctx.strokeRect(absX, absY, absWidth, absHeight);
+
+				// Display percentage, confidence, and class
+				const percentage = Math.round(confidence * 100);
+				console.log(`Object ${index + 1}: BoundingBox [${yMin}, ${xMin}, ${yMax}, ${xMax}]`);
+				console.log(`  Confidence: ${percentage}%`);
+				console.log(`  Class: ${className}`);
 			});
-			console.log("Bounding Boxes:", predictions);
 		}
 	}, [predictions, image]);
 

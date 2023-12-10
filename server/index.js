@@ -71,8 +71,9 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 
 		const predictionsData = await predictions.array();
 		const boundingBoxes = predictionsData[0][0]; // Adjust based on the model's output structure
+		//const confidenceScores = predictionsData[1][0];
 
-		//console.log(boundingBoxes);
+		//console.log(confidenceScores);
 
 		res.json({ success: true, boundingBoxes });
 	} catch (error) {
