@@ -9,7 +9,35 @@ const Home = () => {
 
 	const handleImageChange = (e) => {
 		const file = e.target.files[0];
-		setImage(file);
+
+		// Ensure that the file is a Blob or File
+		if (file instanceof Blob) {
+			setImage({
+				file: file,
+				width: 0, // Set a default value or retrieve the dimensions using another method
+				height: 0,
+			});
+
+			// Use FileReader to read the image dimensions
+			const reader = new FileReader();
+			reader.onload = (event) => {
+				const img = new Image();
+				img.onload = () => {
+					// Update the image dimensions
+					setImage((prevImage) => ({
+						...prevImage,
+						width: img.width,
+						height: img.height,
+					}));
+				};
+				img.src = event.target.result;
+			};
+
+			reader.readAsDataURL(file);
+		} else {
+			console.error("Please select a valid image");
+		}
+
 		setPredictions([]); // Clear previous predictions when a new image is selected
 	};
 
@@ -21,7 +49,7 @@ const Home = () => {
 			}
 
 			const formData = new FormData();
-			formData.append("image", image);
+			formData.append("image", image.file);
 
 			const response = await axios.post("/api/identify-object", formData, {
 				headers: {
@@ -40,7 +68,7 @@ const Home = () => {
 	};
 
 	useEffect(() => {
-		if (predictions.length > 0 && canvasRef.current && image && image.complete) {
+		if (predictions.length > 0 && image) {
 			const canvas = canvasRef.current;
 			const ctx = canvas.getContext("2d");
 
@@ -53,7 +81,8 @@ const Home = () => {
 
 			// Draw bounding boxes
 			predictions.forEach((bbox) => {
-				const [yMin, xMin, yMax, xMax] = bbox;
+				// Check if bbox is an array or a single value
+				const [yMin, xMin, yMax, xMax] = Array.isArray(bbox) ? bbox : [bbox];
 
 				// Convert relative coordinates to absolute pixel values
 				const absX = xMin * image.width;
@@ -72,12 +101,14 @@ const Home = () => {
 
 	const renderBoundingBoxes = () => {
 		if (!predictions || !Array.isArray(predictions) || predictions.length === 0) {
+			console.log("No predictions to render");
 			return null; // No predictions to render
 		}
+		console.log("Rendering prediction");
 
 		return (
 			<div style={{ position: "relative", display: "inline-block" }}>
-				<img src={URL.createObjectURL(image)} alt="Selected" width="300" style={{ display: "block" }} />
+				<img src={URL.createObjectURL(image.file)} alt="Selected" width={image.width} style={{ display: "block" }} />
 				<canvas
 					ref={canvasRef}
 					width={image.width}
@@ -103,7 +134,7 @@ const Home = () => {
 			{image && (
 				<div>
 					<h2>Selected Image:</h2>
-					<img src={URL.createObjectURL(image)} alt="Selected" width="300" />
+					<img src={URL.createObjectURL(image.file)} alt="Selected" width={image.width} />
 					{renderBoundingBoxes()}
 				</div>
 			)}
