@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 
 const Home = () => {
 	const [image, setImage] = useState(null);
 	const [predictions, setPredictions] = useState([]);
+	const canvasRef = useRef(null);
 
 	const handleImageChange = (e) => {
 		const file = e.target.files[0];
@@ -38,27 +39,43 @@ const Home = () => {
 		}
 	};
 
+	useEffect(() => {
+		if (predictions.length > 0 && canvasRef.current) {
+			const canvas = canvasRef.current;
+			const ctx = canvas.getContext("2d");
+
+			// Clear previous drawings
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			// Draw bounding boxes
+			predictions.forEach((bbox) => {
+				const [x, y, width, height] = bbox;
+
+				// Convert relative coordinates to absolute pixel values
+				const absX = x * canvas.width;
+				const absY = y * canvas.height;
+				const absWidth = width * canvas.width;
+				const absHeight = height * canvas.height;
+
+				ctx.strokeStyle = "red";
+				ctx.lineWidth = 2;
+				ctx.strokeRect(absX, absY, absWidth, absHeight);
+			});
+		}
+	}, [predictions]);
+
 	const renderBoundingBoxes = () => {
 		if (!predictions || !Array.isArray(predictions) || predictions.length === 0) {
 			return null; // No predictions to render
 		}
 
 		return (
-			<div style={{ position: "relative", width: "300px" }}>
-				{predictions.map((box, index) => {
-					const [x, y, width, height] = box;
-					const boundingBoxStyle = {
-						position: "absolute",
-						border: "2px solid red",
-						left: `${x * 100}%`,
-						top: `${y * 100}%`,
-						width: `${width * 100}%`,
-						height: `${height * 100}%`,
-					};
-
-					return <div key={index} style={boundingBoxStyle}></div>;
-				})}
-			</div>
+			<canvas
+				ref={canvasRef}
+				width={image.width}
+				height={image.height}
+				style={{ border: "2px solid red", position: "relative", width: "300px" }}
+			></canvas>
 		);
 	};
 
