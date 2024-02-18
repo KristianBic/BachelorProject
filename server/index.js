@@ -29,8 +29,10 @@ let model; // Define model globally
 const loadModel = async () => {
 	try {
 		// Load a pre-trained object detection model (EfficientDet)
-		model = await tfconv.loadGraphModel("file://./models/model/model.json");
-
+		//model = await tfconv.loadGraphModel("file://./models/model/model.json");
+		model = await tfconv.loadGraphModel(
+			"https://raw.githubusercontent.com/hugozanini/TFJS-object-detection/master/models/kangaroo-detector/model.json"
+		);
 		console.log("Model loaded successfully");
 		return model;
 	} catch (error) {
@@ -57,7 +59,7 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 		// Convert the image to a TensorFlow tensor
 		const tensor = tf.browser.fromPixels(canvas).expandDims();
 
-		const resizedTensor = tf.image.resizeBilinear(tensor, [416, 416]);
+		//const resizedTensor = tf.image.resizeBilinear(tensor, [416, 416]);
 
 		// Perform object detection using the loaded model
 		if (!model) {
@@ -67,15 +69,37 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 		}
 
 		// Perform object detection using the executeAsync() method
-		const predictions = await model.executeAsync(resizedTensor);
+		const predictions = await model.executeAsync(tensor);
 
-		const predictionsData = await predictions.array();
-		const boundingBoxes = predictionsData[0][0]; // Adjust based on the model's output structure
+		//const predictionsData = await predictions.array();
+		//const boundingBoxes = predictionsData[0][0]; // Adjust based on the model's output structure
 		//const confidenceScores = predictionsData[1][0];
 
-		//console.log(confidenceScores);
+		const boundingBoxesTensor = predictions[0];
+		const boundingBoxes = await boundingBoxesTensor.array();
 
-		res.json({ success: true, boundingBoxes });
+		/*
+		const boundingBoxes = boundingBoxesValues[0].map((box) => ({
+			xmin: box[0],
+			ymin: box[1],
+			xmax: box[2],
+			ymax: box[3],
+		}));
+*/
+		const confidenceScoresTensor = predictions[4];
+		const confidenceScores = confidenceScoresTensor.arraySync()[0];
+		const confidenceThreshold = 0.5;
+
+		const filteredBoundingBoxes = [];
+		for (let i = 0; i < confidenceScores.length; i++) {
+			if (confidenceScores[i] >= confidenceThreshold) {
+				filteredBoundingBoxes.push(boundingBoxes[0][i]);
+			}
+		}
+
+		console.log(filteredBoundingBoxes);
+
+		res.json({ success: true, filteredBoundingBoxes });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ success: false, message: "Error identifying object" });

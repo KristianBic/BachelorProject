@@ -58,10 +58,11 @@ const Home = () => {
 			});
 
 			const data = response.data;
-			console.log(data); // Log the response to the console for debugging
+			console.log("works");
 
 			// Update state with the predictions
-			setPredictions(data.boundingBoxes || []);
+
+			setPredictions([data.filteredBoundingBoxes] || []);
 		} catch (error) {
 			console.error(error);
 		}
@@ -81,25 +82,25 @@ const Home = () => {
 
 			// Draw bounding boxes
 			predictions.forEach((bbox, index) => {
+				let yMin, xMin, yMax, xMax;
 				// Check if bbox is an array or a single value
-				const [yMin, xMin, yMax, xMax, confidence, className] = Array.isArray(bbox) ? bbox : [bbox];
+				if (Array.isArray(bbox)) {
+					[yMin, xMin, yMax, xMax] = bbox;
+				} else {
+					({ yMin, xMin, yMax, xMax } = bbox); // Destructure object properties
+				}
 
 				// Convert relative coordinates to absolute pixel values
-				const absX = xMin * image.width;
-				const absY = yMin * image.height;
-				const absWidth = (xMax - xMin) * image.width;
-				const absHeight = (yMax - yMin) * image.height;
+				const absX = yMin[0] * image.width;
+				const absY = yMin[1] * image.height;
+				const absWidth = (yMin[2] - yMin[0]) * image.width;
+				const absHeight = (yMin[3] - yMin[1]) * image.height;
 
 				// Draw bounding box directly on the image
 				ctx.strokeStyle = "red";
 				ctx.lineWidth = 2;
 				ctx.strokeRect(absX, absY, absWidth, absHeight);
-
-				// Display percentage, confidence, and class
-				const percentage = Math.round(confidence * 100);
-				console.log(`Object ${index + 1}: BoundingBox [${yMin}, ${xMin}, ${yMax}, ${xMax}]`);
-				console.log(`  Confidence: ${percentage}%`);
-				console.log(`  Class: ${className}`);
+				//console.log(`Object ${index + 1}: BoundingBox [${yMin}, ${xMin}, ${yMax}, ${xMax}]`);
 			});
 		}
 	}, [predictions, image]);
@@ -118,7 +119,7 @@ const Home = () => {
 					ref={canvasRef}
 					width={image.width}
 					height={image.height}
-					style={{ position: "absolute", top: 0, left: 0, border: "2px solid red" }}
+					style={{ position: "absolute", top: 0, left: 0, border: "2px solid black" }}
 				></canvas>
 			</div>
 		);
@@ -148,12 +149,14 @@ const Home = () => {
 				<div>
 					<h2>Detection Results:</h2>
 					<ul>
+						{/* 
 						{predictions.map((boxes, index) => (
 							<li key={index}>
 								Object {index + 1}:<br />
 								BoundingBox: {boxes.map((coord) => coord).join(" | ")}
 							</li>
 						))}
+						*/}
 					</ul>
 				</div>
 			)}
