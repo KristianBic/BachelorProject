@@ -28,11 +28,14 @@ let model; // Define model globally
 
 const loadModel = async () => {
 	try {
+		console.log("Model loading...");
 		// Load a pre-trained object detection model (EfficientDet)
-		//model = await tfconv.loadGraphModel("file://./models/model/model.json");
+		model = await tfconv.loadGraphModel("file://./models/vehicle_model_classes/model.json");
+		/*
 		model = await tfconv.loadGraphModel(
 			"https://raw.githubusercontent.com/hugozanini/TFJS-object-detection/master/models/kangaroo-detector/model.json"
 		);
+*/
 		console.log("Model loaded successfully");
 		return model;
 	} catch (error) {
@@ -68,38 +71,48 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 			return;
 		}
 
-		// Perform object detection using the executeAsync() method
 		const predictions = await model.executeAsync(tensor);
 
-		//const predictionsData = await predictions.array();
-		//const boundingBoxes = predictionsData[0][0]; // Adjust based on the model's output structure
-		//const confidenceScores = predictionsData[1][0];
+		const boundingBoxesTensor = predictions[2];
+		const boundingBoxes = await boundingBoxesTensor.arraySync();
 
-		const boundingBoxesTensor = predictions[0];
-		const boundingBoxes = await boundingBoxesTensor.array();
+		const confidenceScoresTensor = predictions[1];
+		const confidenceScores = confidenceScoresTensor.arraySync();
+		const confidenceThreshold = 0.3;
 
-		/*
-		const boundingBoxes = boundingBoxesValues[0].map((box) => ({
-			xmin: box[0],
-			ymin: box[1],
-			xmax: box[2],
-			ymax: box[3],
-		}));
-*/
-		const confidenceScoresTensor = predictions[4];
-		const confidenceScores = confidenceScoresTensor.arraySync()[0];
-		const confidenceThreshold = 0.5;
+		//const classesTensor = predictions[1];
+		//const classes = classesTensor.dataSync();
+		const classLabels = ["Class 1", "Ambulance", "Bus", "Car", "Motorcycle", "Truck"];
 
 		const filteredBoundingBoxes = [];
-		for (let i = 0; i < confidenceScores.length; i++) {
-			if (confidenceScores[i] >= confidenceThreshold) {
-				filteredBoundingBoxes.push(boundingBoxes[0][i]);
+		const filteredCasslabels = [];
+		const filteredConfidenceScore = [];
+
+		const confidenceScoresSingles = confidenceScores[0];
+		for (let i = 0; i < confidenceScoresSingles.length; i++) {
+			for (let j = 0; j < classLabels.length; j++) {
+				//console.log(confidenceScoresSingles[i][j]);
+
+				if (confidenceScoresSingles[i][j] >= confidenceThreshold) {
+					//console.log("Correct:" + confidenceScoresSingles[i][j]);
+					filteredCasslabels.push(classLabels[j]);
+					filteredBoundingBoxes.push(boundingBoxes[0][i]);
+					filteredConfidenceScore.push(confidenceScoresSingles[i][j]);
+				}
 			}
 		}
 
-		console.log(filteredBoundingBoxes);
+		//console.log(filteredBoundingBoxes);
+		console.log(filteredConfidenceScore);
+		console.log(filteredCasslabels);
+		//console.log(classLabels.length);
 
-		res.json({ success: true, filteredBoundingBoxes });
+		if (filteredBoundingBoxes.length > 0) {
+			console.log("Uspech!!!!!!!!!!!!!!!!");
+			res.json({ success: true, filteredBoundingBoxes });
+		} else {
+			console.log("Zhoda sa nenasla");
+		}
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ success: false, message: "Error identifying object" });
