@@ -82,7 +82,7 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 
 		//const classesTensor = predictions[1];
 		//const classes = classesTensor.dataSync();
-		const classLabels = ["Class 1", "Ambulance", "Bus", "Car", "Motorcycle", "Truck"];
+		const classLabels = ["Other", "Ambulance", "Bus", "Car", "Motorcycle", "Truck"];
 
 		const filteredBoundingBoxes = [];
 		const filteredCasslabels = [];
