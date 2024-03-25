@@ -30,7 +30,7 @@ const loadModel = async () => {
 	try {
 		console.log("Model loading...");
 		// Load a pre-trained object detection model (EfficientDet)
-		model = await tfconv.loadGraphModel("file://./models/vehicle_model_classes/model.json");
+		model = await tfconv.loadGraphModel("file://./models/brain_model/model.json");
 		/*
 		model = await tfconv.loadGraphModel(
 			"https://raw.githubusercontent.com/hugozanini/TFJS-object-detection/master/models/kangaroo-detector/model.json"
@@ -73,43 +73,80 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 
 		const predictions = await model.executeAsync(tensor);
 
-		const boundingBoxesTensor = predictions[2];
+		const boundingBoxesTensor = predictions[6];
 		const boundingBoxes = await boundingBoxesTensor.arraySync();
 
-		const confidenceScoresTensor = predictions[1];
+		const confidenceScoresTensor = predictions[7];
 		const confidenceScores = confidenceScoresTensor.arraySync();
-		const confidenceThreshold = 0.3;
+		const confidenceThreshold = 0.5;
 
 		//const classesTensor = predictions[1];
 		//const classes = classesTensor.dataSync();
-		const classLabels = ["Other", "Ambulance", "Bus", "Car", "Motorcycle", "Truck"];
+		const classLabels = ["Other", "negative", "positive"];
 
 		const filteredBoundingBoxes = [];
 		const filteredCasslabels = [];
 		const filteredConfidenceScore = [];
 
+		const seen = {}; // Use an object to keep track of seen combinations
+
 		const confidenceScoresSingles = confidenceScores[0];
 		for (let i = 0; i < confidenceScoresSingles.length; i++) {
 			for (let j = 0; j < classLabels.length; j++) {
-				//console.log(confidenceScoresSingles[i][j]);
-
 				if (confidenceScoresSingles[i][j] >= confidenceThreshold) {
-					//console.log("Correct:" + confidenceScoresSingles[i][j]);
-					filteredCasslabels.push(classLabels[j]);
-					filteredBoundingBoxes.push(boundingBoxes[0][i]);
-					filteredConfidenceScore.push(confidenceScoresSingles[i][j]);
+					const key = `${boundingBoxes[0][i]}_${classLabels[j]}`; // Forming a unique key based on bounding box and class label
+					if (!seen[key]) {
+						// Checking if the combination has been seen before
+						seen[key] = true; // Marking it as seen
+						filteredCasslabels.push(classLabels[j]);
+						filteredBoundingBoxes.push(boundingBoxes[0][i]);
+						filteredConfidenceScore.push(confidenceScoresSingles[i][j]);
+					}
 				}
 			}
 		}
+		function arraysAreEqual(arr1, arr2) {
+			if (arr1.length !== arr2.length) {
+				return false;
+			}
+			for (let i = 0; i < arr1.length; i++) {
+				if (arr1[i] !== arr2[i]) {
+					return false;
+				}
+			}
+			return true;
+		}
+		function removeDuplicates(array, scores, labels) {
+			const uniqueArray = [];
+			const uniqueScores = [];
+			const uniqueLabels = [];
+			array.forEach((item, index) => {
+				const existingIndex = uniqueArray.findIndex((existingItem) => arraysAreEqual(existingItem.array, item));
+				if (existingIndex === -1) {
+					uniqueArray.push({ array: item, score: scores[index], label: labels[index] });
+					uniqueScores.push(scores[index]);
+					uniqueLabels.push(labels[index]);
+				} else if (scores[index] > uniqueArray[existingIndex].score) {
+					uniqueArray[existingIndex] = { array: item, score: scores[index], label: labels[index] };
+					uniqueScores[existingIndex] = scores[index];
+					uniqueLabels[existingIndex] = labels[index];
+				}
+			});
+			return [uniqueArray.map((item) => item.array), uniqueScores, uniqueLabels];
+		}
 
-		//console.log(filteredBoundingBoxes);
-		console.log(filteredConfidenceScore);
-		console.log(filteredCasslabels);
-		//console.log(classLabels.length);
+		const [uniqueBoundingBoxes, uniqueConfidenceScores, uniqueLabels] = removeDuplicates(
+			filteredBoundingBoxes,
+			filteredConfidenceScore,
+			filteredCasslabels
+		);
+		//console.log(uniqueBoundingBoxes);
+		//console.log(uniqueConfidenceScores);
+		//console.log(uniqueLabels);
 
 		if (filteredBoundingBoxes.length > 0) {
 			console.log("Uspech!!!!!!!!!!!!!!!!");
-			res.json({ success: true, filteredBoundingBoxes });
+			res.json({ success: true, uniqueBoundingBoxes, uniqueConfidenceScores, uniqueLabels });
 		} else {
 			console.log("Zhoda sa nenasla");
 		}

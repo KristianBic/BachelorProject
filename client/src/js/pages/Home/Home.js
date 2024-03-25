@@ -5,6 +5,8 @@ import axios from "axios";
 const Home = () => {
 	const [image, setImage] = useState(null);
 	const [predictions, setPredictions] = useState([]);
+	const [confidence, setConfidence] = useState([]);
+	const [label, setLabel] = useState([]);
 	const canvasRef = useRef(null);
 
 	const handleImageChange = (e) => {
@@ -39,6 +41,8 @@ const Home = () => {
 		}
 
 		setPredictions([]); // Clear previous predictions when a new image is selected
+		setConfidence([]);
+		setLabel([]);
 	};
 
 	const handleImageSubmit = async () => {
@@ -62,7 +66,9 @@ const Home = () => {
 
 			// Update state with the predictions
 
-			setPredictions([data.filteredBoundingBoxes] || []);
+			setPredictions([data.uniqueBoundingBoxes] || []);
+			setConfidence([data.uniqueConfidenceScores] || []);
+			setLabel([data.uniqueLabels] || []);
 		} catch (error) {
 			console.error(error);
 		}
@@ -79,9 +85,8 @@ const Home = () => {
 
 			// Clear previous drawings
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 			// Draw bounding boxes
-			predictions.forEach((bbox, index) => {
+			predictions[0].forEach((bbox, index) => {
 				let yMin, xMin, yMax, xMax;
 				// Check if bbox is an array or a single value
 				if (Array.isArray(bbox)) {
@@ -90,17 +95,20 @@ const Home = () => {
 					({ yMin, xMin, yMax, xMax } = bbox); // Destructure object properties
 				}
 
-				// Convert relative coordinates to absolute pixel values
-				const absX = yMin[0] * image.width;
-				const absY = yMin[1] * image.height;
-				const absWidth = (yMin[2] - yMin[0]) * image.width;
-				const absHeight = (yMin[3] - yMin[1]) * image.height;
+				const absY = yMin * image.width;
+				const absX = xMin * image.height;
+				const absHeight = (yMax - yMin) * image.width;
+				const absWidth = (xMax - xMin) * image.height;
 
 				// Draw bounding box directly on the image
 				ctx.strokeStyle = "red";
 				ctx.lineWidth = 2;
 				ctx.strokeRect(absX, absY, absWidth, absHeight);
-				//console.log(`Object ${index + 1}: BoundingBox [${yMin}, ${xMin}, ${yMax}, ${xMax}]`);
+
+				ctx.fillStyle = "red";
+				ctx.font = "14px Arial";
+				const confidencePercentage = (confidence[0][index] * 100).toFixed(2);
+				ctx.fillText(`${label[0][index]} [ ${confidencePercentage} %]`, absX, absY - 5);
 			});
 		}
 	}, [predictions, image]);
