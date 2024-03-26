@@ -79,8 +79,8 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 		const confidenceScoresTensor = predictions[4]; //7
 		const confidenceScores = confidenceScoresTensor.arraySync();
 
-		//console.log(predictions);
-		const confidenceThreshold = 0.6;
+		console.log(confidenceScores);
+		const confidenceThreshold = 0.7;
 
 		//const classesTensor = predictions[1];
 		//const classes = classesTensor.dataSync();

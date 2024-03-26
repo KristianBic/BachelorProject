@@ -14,28 +14,14 @@ const Home = () => {
 
 		// Ensure that the file is a Blob or File
 		if (file instanceof Blob) {
-			setImage({
-				file: file,
-				width: 0, // Set a default value or retrieve the dimensions using another method
-				height: 0,
+			// Resize the image to 640x640
+			resizeImage(file, 640, 640, (resizedImage) => {
+				setImage({
+					file: resizedImage,
+					width: 640,
+					height: 640,
+				});
 			});
-
-			// Use FileReader to read the image dimensions
-			const reader = new FileReader();
-			reader.onload = (event) => {
-				const img = new Image();
-				img.onload = () => {
-					// Update the image dimensions
-					setImage((prevImage) => ({
-						...prevImage,
-						width: img.width,
-						height: img.height,
-					}));
-				};
-				img.src = event.target.result;
-			};
-
-			reader.readAsDataURL(file);
 		} else {
 			console.error("Please select a valid image");
 		}
@@ -43,6 +29,41 @@ const Home = () => {
 		setPredictions([]); // Clear previous predictions when a new image is selected
 		setConfidence([]);
 		setLabel([]);
+	};
+	const resizeImage = (file, maxWidth, maxHeight, callback) => {
+		const reader = new FileReader();
+		reader.onload = (event) => {
+			const img = new Image();
+			img.onload = () => {
+				const canvas = document.createElement("canvas");
+				let width = img.width;
+				let height = img.height;
+
+				if (width > height) {
+					if (width > maxWidth) {
+						height *= maxWidth / width;
+						width = maxWidth;
+					}
+				} else {
+					if (height > maxHeight) {
+						width *= maxHeight / height;
+						height = maxHeight;
+					}
+				}
+
+				canvas.width = width;
+				canvas.height = height;
+
+				const ctx = canvas.getContext("2d");
+				ctx.drawImage(img, 0, 0, width, height);
+
+				canvas.toBlob((blob) => {
+					callback(blob);
+				}, file.type);
+			};
+			img.src = event.target.result;
+		};
+		reader.readAsDataURL(file);
 	};
 
 	const handleImageSubmit = async () => {
