@@ -62,16 +62,22 @@ const Home = () => {
 			});
 
 			const data = response.data;
-			console.log("works");
 
 			// Update state with the predictions
-
 			setPredictions([data.uniqueBoundingBoxes] || []);
 			setConfidence([data.uniqueConfidenceScores] || []);
 			setLabel([data.uniqueLabels] || []);
 		} catch (error) {
 			console.error(error);
 		}
+	};
+
+	const saveImage = () => {
+		const canvas = canvasRef.current;
+		const link = document.createElement("a");
+		link.download = "image_with_boxes.png";
+		link.href = canvas.toDataURL();
+		link.click();
 	};
 
 	useEffect(() => {
@@ -85,31 +91,39 @@ const Home = () => {
 
 			// Clear previous drawings
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			// Draw bounding boxes
-			predictions[0].forEach((bbox, index) => {
-				let yMin, xMin, yMax, xMax;
-				// Check if bbox is an array or a single value
-				if (Array.isArray(bbox)) {
-					[yMin, xMin, yMax, xMax] = bbox;
-				} else {
-					({ yMin, xMin, yMax, xMax } = bbox); // Destructure object properties
-				}
 
-				const absY = yMin * image.width;
-				const absX = xMin * image.height;
-				const absHeight = (yMax - yMin) * image.width;
-				const absWidth = (xMax - xMin) * image.height;
+			// Draw the original image on the canvas
+			const img = new Image();
+			img.onload = () => {
+				ctx.drawImage(img, 0, 0, image.width, image.height);
 
-				// Draw bounding box directly on the image
-				ctx.strokeStyle = "red";
-				ctx.lineWidth = 2;
-				ctx.strokeRect(absX, absY, absWidth, absHeight);
+				// Draw bounding boxes
+				predictions[0].forEach((bbox, index) => {
+					let yMin, xMin, yMax, xMax;
+					// Check if bbox is an array or a single value
+					if (Array.isArray(bbox)) {
+						[yMin, xMin, yMax, xMax] = bbox;
+					} else {
+						({ yMin, xMin, yMax, xMax } = bbox); // Destructure object properties
+					}
 
-				ctx.fillStyle = "red";
-				ctx.font = "14px Arial";
-				const confidencePercentage = (confidence[0][index] * 100).toFixed(2);
-				ctx.fillText(`${label[0][index]} [ ${confidencePercentage} %]`, absX, absY - 5);
-			});
+					const absY = yMin * image.width;
+					const absX = xMin * image.height;
+					const absHeight = (yMax - yMin) * image.width;
+					const absWidth = (xMax - xMin) * image.height;
+
+					// Draw bounding box directly on the image
+					ctx.strokeStyle = "red";
+					ctx.lineWidth = 2;
+					ctx.strokeRect(absX, absY, absWidth, absHeight);
+
+					ctx.fillStyle = "red";
+					ctx.font = "14px Arial";
+					const confidencePercentage = (confidence[0][index] * 100).toFixed(2);
+					ctx.fillText(`${label[0][index]} [ ${confidencePercentage} %]`, absX, absY - 5);
+				});
+			};
+			img.src = URL.createObjectURL(image.file);
 		}
 	}, [predictions, image]);
 
@@ -144,28 +158,13 @@ const Home = () => {
 			<h1>Object Detection</h1>
 			<input type="file" accept="image/*" onChange={handleImageChange} />
 			<button onClick={handleImageSubmit}>Detect Objects</button>
+			{predictions.length > 0 && <button onClick={saveImage}>Save Image</button>}
 
 			{image && (
 				<div>
 					<h2>Selected Image:</h2>
 					<img src={URL.createObjectURL(image.file)} alt="Selected" width={image.width} />
 					{renderBoundingBoxes()}
-				</div>
-			)}
-
-			{predictions.length > 0 && (
-				<div>
-					<h2>Detection Results:</h2>
-					<ul>
-						{/* 
-						{predictions.map((boxes, index) => (
-							<li key={index}>
-								Object {index + 1}:<br />
-								BoundingBox: {boxes.map((coord) => coord).join(" | ")}
-							</li>
-						))}
-						*/}
-					</ul>
 				</div>
 			)}
 		</div>

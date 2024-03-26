@@ -30,7 +30,7 @@ const loadModel = async () => {
 	try {
 		console.log("Model loading...");
 		// Load a pre-trained object detection model (EfficientDet)
-		model = await tfconv.loadGraphModel("file://./models/brain_model/model.json");
+		model = await tfconv.loadGraphModel("file://./models/brain_MD_V1_640x640/model.json");
 		/*
 		model = await tfconv.loadGraphModel(
 			"https://raw.githubusercontent.com/hugozanini/TFJS-object-detection/master/models/kangaroo-detector/model.json"
@@ -73,12 +73,14 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 
 		const predictions = await model.executeAsync(tensor);
 
-		const boundingBoxesTensor = predictions[6];
+		const boundingBoxesTensor = predictions[6]; //6
 		const boundingBoxes = await boundingBoxesTensor.arraySync();
 
-		const confidenceScoresTensor = predictions[7];
+		const confidenceScoresTensor = predictions[4]; //7
 		const confidenceScores = confidenceScoresTensor.arraySync();
-		const confidenceThreshold = 0.5;
+
+		//console.log(predictions);
+		const confidenceThreshold = 0.6;
 
 		//const classesTensor = predictions[1];
 		//const classes = classesTensor.dataSync();
