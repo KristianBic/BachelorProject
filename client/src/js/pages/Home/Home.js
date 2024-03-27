@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
 import axios from "axios";
+import Navbar from "../../layout/Navbar";
+import Hero from "../../layout/Hero";
+import Footer from "../../layout/Footer";
+import "../../../css/Home_style.scss";
+import galleryBackgroundImage from "../../assets/image/images/gallery_home-page.png";
+import EmptyGallery from "../../assets/image/icons/noImages.svg";
 
 const Home = () => {
 	const [image, setImage] = useState(null);
@@ -174,20 +180,44 @@ const Home = () => {
 				<title>Home</title>
 				<meta name="description" content="This page explains everything about our react app." />
 			</Helmet>
-			<h1>Home Page</h1>
+			<Navbar />
+			<div className="body">
+				<Hero />
+				<div className="services">
+					<h2>Detekcia nádoru</h2>
+					{!image && (
+						<div className="emptyContainer">
+							<img src={EmptyGallery} alt="SVG logo image" />
+							<h3>Pridajte obrázok</h3>
+							<p>Pre detekovanie objektov na medicínskych snímkach, vložte obrázok</p>
+						</div>
+					)}
+					<div className="centerContainer">
+						<label class="buttonFile" for="upload">
+							Vlozit subor
+						</label>
+						<input id="upload" type="file" accept="image/*" onChange={handleImageChange} />
 
-			<h1>Object Detection</h1>
-			<input type="file" accept="image/*" onChange={handleImageChange} />
-			<button onClick={handleImageSubmit}>Detect Objects</button>
-			{predictions.length > 0 && <button onClick={saveImage}>Save Image</button>}
-
-			{image && (
-				<div>
-					<h2>Selected Image:</h2>
-					<img src={URL.createObjectURL(image.file)} alt="Selected" width={image.width} />
-					{renderBoundingBoxes()}
+						{image && (
+							<button className="buttonFile" onClick={handleImageSubmit}>
+								Detect Objects
+							</button>
+						)}
+						{predictions.length > 0 && (
+							<button className="buttonFile" onClick={saveImage}>
+								Save Image
+							</button>
+						)}
+					</div>
+					{image && (
+						<div className="detectedImage">
+							<img src={URL.createObjectURL(image.file)} alt="Selected" width={image.width} />
+							{renderBoundingBoxes()}
+						</div>
+					)}
 				</div>
-			)}
+			</div>
+			<Footer />
 		</div>
 	);
 };

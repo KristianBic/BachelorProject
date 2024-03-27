@@ -1,0 +1,97 @@
+@mixin responsive($breakpoint, $height) {
+  @if $breakpoint==mobile {
+    @if $height==0 {
+      @media only screen and (max-width: 600px) {
+        @content;
+      }
+    } @else {
+      @media screen and (max-width: 600px) and (max-height: $height) {
+        @content;
+      }
+    }
+  }
+
+  @if $breakpoint==smallerMobile {
+    @if $height==0 {
+      @media only screen and (max-width: 360px) {
+        @content;
+      }
+    } @else {
+      @media screen and (max-width: 360px) and (max-height: $height) {
+        @content;
+      }
+    }
+  }
+
+  @if $breakpoint==tablet {
+    @if $height==0 {
+      @media only screen and (max-width: 768px) {
+        @content;
+      }
+    } @else {
+      @media screen and (max-width: 768px) and (max-height: $height) {
+        @content;
+      }
+    }
+  }
+
+  @if $breakpoint==biggerTablet {
+    @if $height==0 {
+      @media only screen and (max-width: 900px) {
+        @content;
+      }
+    } @else {
+      @media screen and (max-width: 900px) and (max-height: $height) {
+        @content;
+      }
+    }
+  }
+
+  @if $breakpoint==smallerDesktop {
+    @if $height==0 {
+      @media screen and (max-width: 1500px) {
+        @content;
+      }
+    } @else {
+      @media screen and (max-width: 1500px) and (max-height: $height) {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin flex($direction, $justify, $align) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+@mixin absoluteAlign() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+@mixin verzia_mobil {
+  .verzia_pc {
+    display: block;
+  }
+  .verzia_mobil {
+    display: none;
+  }
+  @media (max-width: #{767px}) {
+    .verzia_pc {
+      display: none !important;
+    }
+    .verzia_mobil {
+      display: block !important;
+    }
+  }
+}
+
+@mixin doubleclick {
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
+}

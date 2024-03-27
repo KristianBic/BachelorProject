@@ -1,0 +1,801 @@
+@import "./keyframes";
+@import "./variables";
+@import "./mixins";
+
+* {
+	scrollbar-width: thin;
+	scrollbar-color: #0ae lightgray;
+	--webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-track {
+	--webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+	background-color: lightgray;
+}
+
+::-webkit-scrollbar {
+	width: 10px;
+	background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #0ae;
+}
+
+.resize-animation-stopper * {
+	animation: none !important;
+	transition: none !important;
+}
+.bolder-text {
+	font-weight: bolder;
+}
+
+::selection {
+	background: $primaryVariant;
+}
+
+.dots {
+	width: 3.125rem;
+	height: 3.125rem;
+	position: absolute;
+	z-index: 1;
+
+	&.one {
+		bottom: 4.375rem;
+		left: 6.25rem;
+		z-index: 3;
+
+		@include responsive(tablet, 0) {
+			display: none;
+		}
+	}
+
+	&.two {
+		left: 33.125rem;
+		top: 9.375rem;
+		z-index: 3;
+
+		@include responsive(tablet, 0) {
+			display: none;
+		}
+	}
+
+	&.three {
+		top: 0;
+		left: 50%;
+		@include responsive(tablet, 0) {
+			left: 80%;
+		}
+	}
+
+	&.four {
+		top: 10rem;
+		left: 4rem;
+	}
+
+	&.five {
+		bottom: 3rem;
+		left: 3rem;
+	}
+
+	&.six {
+		bottom: 20rem;
+		left: 20%;
+	}
+
+	&.seven {
+		display: none;
+	}
+
+	&.eight {
+		top: 22rem;
+		right: 1rem;
+	}
+
+	&.nine {
+		top: 40rem;
+		left: 10rem;
+	}
+
+	&.ten {
+		top: 45rem;
+		right: 5rem;
+	}
+
+	&.eleven {
+		bottom: 6rem;
+		right: 2rem;
+	}
+
+	&.twelve {
+		bottom: 0rem;
+		left: 5rem;
+		@include responsive(tablet, 0) {
+			left: 10%;
+			bottom: -5rem;
+		}
+	}
+
+	&.thirteen {
+		bottom: 20rem;
+		left: 3rem;
+	}
+
+	&.fourteen {
+		bottom: 2rem;
+		left: 30rem;
+
+		@include responsive(tablet, 0) {
+			left: 20%;
+		}
+	}
+
+	&.fifteen {
+		top: 8rem;
+		right: 6rem;
+	}
+
+	&.sixteen {
+		display: none;
+	}
+
+	&.seventeen {
+		top: 5rem;
+		left: 16rem;
+
+		@include responsive(tablet, 0) {
+			left: 10%;
+		}
+		@include responsive(smallerMobile, 0) {
+			left: 0;
+		}
+	}
+
+	&.eighteen {
+		top: 2rem;
+		right: 18rem;
+		@include responsive(tablet, 0) {
+			right: 10%;
+		}
+	}
+
+	&.nineteen {
+		top: 15rem;
+		right: 2rem;
+	}
+
+	&.twenty {
+		left: -1rem;
+		top: 25rem;
+	}
+
+	&.twentyone {
+		top: 32rem;
+		right: 50rem;
+	}
+
+	&.twentytwo {
+		top: 54rem;
+		right: 5rem;
+	}
+
+	&.twentythree {
+		top: 60rem;
+		left: 20rem;
+
+		@include responsive(tablet, 0) {
+			left: 50%;
+		}
+	}
+
+	&.twentyfour {
+		bottom: 23rem;
+		left: -1rem;
+	}
+
+	&.twentyfive {
+		bottom: 1rem;
+		right: 40rem;
+	}
+
+	&.twentysix {
+		top: 2rem;
+		left: 30rem;
+
+		@include responsive(tablet, 0) {
+			display: none;
+		}
+	}
+
+	&.twentyseven {
+		top: 10rem;
+		left: 10rem;
+
+		@include responsive(tablet, 0) {
+			left: 10%;
+		}
+	}
+
+	&.twentyeight {
+		top: 6rem;
+		right: 10rem;
+
+		@include responsive(tablet, 0) {
+			top: 3rem;
+			right: 10%;
+		}
+	}
+
+	&.twentynine {
+		bottom: 2rem;
+		left: 15rem;
+		@include responsive(tablet, 0) {
+			left: 10%;
+		}
+	}
+
+	&.thirty {
+		top: 20rem;
+		right: 2rem;
+
+		@include responsive(tablet, 0) {
+			left: 50%;
+		}
+	}
+
+	&.thirtyone {
+		bottom: 3rem;
+		left: -0.5rem;
+
+		@include responsive(tablet, 0) {
+			display: none;
+		}
+	}
+
+	&.thirtytwo {
+		top: 8rem;
+		right: 22rem;
+
+		@include responsive(tablet, 0) {
+			right: 20%;
+		}
+	}
+
+	&.thirtythree {
+		top: -2.5rem;
+		right: 2rem;
+	}
+
+	&.thirtyfour {
+		top: 19rem;
+		left: 3rem;
+	}
+
+	&.thirtyfive {
+		bottom: 6rem;
+		right: 30rem;
+	}
+}
+
+//TEXT
+h1 {
+	font-family: $fontTitles;
+	font-size: 3rem;
+	line-height: 3.5rem;
+	letter-spacing: 0px;
+	text-transform: uppercase;
+}
+
+h2 {
+	font-family: $fontTitles;
+	font-size: 2.125rem;
+	line-height: 2.5rem;
+	letter-spacing: 0px;
+	text-transform: uppercase;
+}
+
+h3 {
+	font-family: $fontTitles;
+	font-size: 1.5rem;
+	line-height: 1.75rem;
+	letter-spacing: 0.18px;
+	text-transform: uppercase;
+	font-style: normal;
+	font-weight: normal;
+}
+
+h4 {
+	font-family: $fontTitles;
+	font-size: 1.25rem;
+	line-height: 1.5rem;
+	letter-spacing: 0.15px;
+	text-transform: uppercase;
+}
+
+p {
+	font-family: $fontText;
+	font-size: 1.125rem;
+	line-height: 1.5rem;
+	letter-spacing: 0.5px;
+}
+
+ul {
+	font-family: $fontText;
+	font-size: 1.125rem;
+	line-height: 1.5rem;
+	letter-spacing: 0.5px;
+}
+
+.button {
+	text-decoration: none;
+	font-weight: 600;
+	font-family: $fontText;
+	font-size: 1.125rem;
+	letter-spacing: 0.5px;
+	align-items: center;
+	padding: 0.625rem 2.25rem;
+	color: $white;
+	background-color: $primaryMain;
+	border: 2.5px solid #2e74ff;
+	cursor: pointer;
+	//transition: all 0.3s ease;
+	transition: 0.6s;
+
+	&:hover {
+		background-color: $white;
+		color: $primaryMain;
+	}
+}
+
+.hero-services {
+	position: relative;
+	height: 45rem;
+	//min-height: 100vh;
+	//height: 100vh;
+	width: 100%;
+	max-width: 130rem;
+	margin: auto;
+
+	@include responsive(tablet, 0) {
+		height: unset;
+		min-height: 100vh;
+	}
+
+	@include responsive(mobile, 0) {
+		height: unset;
+		min-height: 100vh;
+	}
+
+	.hero-logo {
+		visibility: visible;
+		transition: opacity 200ms, visibility 200ms;
+		width: 10rem;
+		height: 10rem;
+		position: absolute;
+		top: 3rem;
+		z-index: 4;
+		margin: 0 5.5rem;
+		opacity: 1;
+		@media screen and (max-width: 65em) {
+			z-index: 3;
+		}
+		@include responsive(tablet, 0) {
+			left: 50%;
+			margin: 0;
+			transform: translateX(-50%);
+		}
+		@include responsive(mobile, 0) {
+			width: 6rem;
+			height: 6rem;
+		}
+		&.hidden {
+			opacity: 0;
+			visibility: hidden;
+		}
+	}
+
+	.hero-container {
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		position: relative;
+		z-index: 0;
+		@include responsive(tablet, 0) {
+			height: 80vh;
+		}
+		.text-container {
+			z-index: 2;
+			position: absolute;
+			top: 17rem;
+			width: 100%;
+			padding-left: 5.5rem;
+			@media (max-width: 65em) {
+				@include flex(column, center, flex-start);
+				left: 0;
+				top: 0;
+				position: absolute;
+				margin: 0;
+				width: 100vw;
+				z-index: 3;
+				height: calc(100%);
+				background: rgba($color: #fff, $alpha: 0.5);
+			}
+			@include responsive(tablet, 0) {
+				background: rgba($color: #fff, $alpha: 0.2);
+				left: 0;
+				align-items: center;
+				right: 0;
+				max-width: unset;
+				margin-left: auto;
+				margin-right: auto;
+				padding: 0 1.25rem;
+				text-align: center;
+			}
+			@include responsive(smallerMobile, 0) {
+				top: 70%;
+			}
+
+			h1 {
+				max-width: 20ch;
+				@include responsive(tablet, 0) {
+					max-width: 70vw;
+				}
+				color: $primaryMain;
+				@include responsive(mobile, 0) {
+					font-size: 2.125rem;
+					line-height: 2.5rem;
+					letter-spacing: 0px;
+					text-transform: uppercase;
+				}
+			}
+
+			p {
+				max-width: 45ch;
+				@include responsive(tablet, 0) {
+					max-width: 45ch;
+				}
+				margin-top: 2.25rem;
+				margin-bottom: 2.25rem;
+			}
+
+			button {
+				transition: 0.6s;
+
+				&:hover {
+					background-color: transparent;
+					color: $primaryMain;
+				}
+			}
+			h1,
+			p,
+			button {
+				transform: translateY(2rem);
+			}
+			@media (max-width: 65em) {
+				left: 0;
+				top: 0;
+				width: 100vw;
+				height: 100%;
+				background: rgba($color: #fff, $alpha: 0.6);
+			}
+		}
+	}
+}
+.mediaContainer {
+	width: calc(100% - 5.5rem);
+	height: 100%;
+	overflow: hidden;
+	position: relative;
+	@media screen and (max-width: 2080px) {
+		width: 100%;
+	}
+}
+.hero-backgroundImage {
+	/* &:before {
+    content: "";
+    position: absolute;
+    height: 16.1875rem;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 2;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0) 0%,
+      #ffffff 100%
+    ); 
+  }*/
+	opacity: 1;
+	width: 100%;
+	position: relative;
+	@include responsive(smallerDesktop, 0) {
+		width: 150vw;
+		height: auto;
+	}
+	@media (max-width: 65em) {
+		position: relative;
+		width: 120vw;
+		height: auto;
+	}
+	@media (max-width: 1000px) {
+		width: 145vw;
+	}
+	@include responsive(biggerTablet, 0) {
+		width: 165vw;
+		height: auto;
+	}
+	@include responsive(tablet, 0) {
+		width: auto;
+		height: 80vh;
+		opacity: 0.4;
+	}
+	@include responsive(mobile, 0) {
+		opacity: 0.4;
+		width: auto;
+		height: 90vh;
+	}
+}
+
+.hero-rectangle {
+	z-index: 1;
+	position: absolute;
+	top: 0;
+	left: -3px;
+	width: 50%;
+	height: auto;
+	@media screen and (max-width: 1650px) {
+		width: 60%;
+	}
+	@include responsive(smallerDesktop, 0) {
+		height: 100%;
+		width: auto;
+	}
+	@media (max-width: 65em) {
+		display: none;
+	}
+}
+
+.hero-simple {
+	width: 100%;
+	position: relative;
+
+	.hero-logo {
+		visibility: visible;
+		transition: opacity 200ms, visibility 200ms;
+		width: 10rem;
+		height: 10rem;
+		position: absolute;
+		top: 3rem;
+		z-index: 4;
+		margin: 0 5.5rem;
+		opacity: 1;
+
+		@include responsive(biggerTablet, 0) {
+			display: none;
+		}
+
+		@media (max-width: 65em) {
+			z-index: 3;
+		}
+
+		&.hidden {
+			opacity: 0;
+			visibility: hidden;
+		}
+	}
+
+	.hero-container {
+		width: 100%;
+		text-align: center;
+		position: relative;
+
+		//top: 7rem;
+		padding: 10rem 0 4rem 0;
+
+		h2 {
+			margin-bottom: 1rem;
+			@media (max-width: 65em) {
+				margin-top: 3rem;
+			}
+		}
+
+		p {
+			margin: 0 auto;
+			max-width: 50ch;
+			@include responsive(mobile, 0) {
+				margin: 0 1.25rem;
+			}
+		}
+		.vozovy-park-hero-text {
+			@include responsive(mobile, 0) {
+				margin: 0;
+			}
+		}
+	}
+}
+
+.contactUs {
+	max-width: 130rem;
+	margin: auto;
+	position: relative;
+	@include flex(row, center, center);
+	@include responsive(tablet, 0) {
+		@include flex(column, center, center);
+		padding: 0 5.5rem 7rem 5.5rem;
+	}
+	@include responsive(mobile, 0) {
+		@include flex(column, center, center);
+		padding: 0 0 7rem 0;
+	}
+
+	&:after {
+		content: "";
+		position: relative;
+		width: 0.9rem;
+		height: 16rem;
+		background: linear-gradient(94.44deg, #2e74ff 0.54%, rgba(46, 116, 255, 0.7) 102.32%);
+
+		@include responsive(tablet, 0) {
+			width: 100%;
+			height: 0.6rem;
+			order: 1;
+		}
+	}
+
+	.contactUs-image {
+		opacity: 0.9;
+		height: 25rem;
+		min-width: 30%;
+		z-index: 3;
+		position: relative;
+		object-fit: cover;
+		box-shadow: 0px 24px 38px rgba(183, 183, 183, 0.14), 0px 9px 46px rgba(183, 183, 183, 0.12), 0px 11px 15px rgba(183, 183, 183, 0.2);
+
+		@include responsive(tablet, 0) {
+			display: none;
+		}
+	}
+
+	.contactUs-container {
+		max-width: 35%;
+		max-height: 30rem;
+		background-color: $white;
+		z-index: 3;
+		margin: 12rem 0;
+		position: relative;
+		@include flex(row, center, center);
+		box-shadow: 0px 24px 38px rgba(183, 183, 183, 0.14), 0px 9px 46px rgba(183, 183, 183, 0.12), 0px 11px 15px rgba(183, 183, 183, 0.2);
+
+		@include responsive(tablet, 0) {
+			order: 2;
+			margin: 0;
+			max-width: unset;
+			width: 100%;
+		}
+
+		.contactUs-content {
+			width: 100%;
+			margin: 3rem;
+			@include responsive(smallerMobile, 0) {
+				margin: 3rem 1.5rem;
+			}
+			p {
+				margin: 2rem 0;
+			}
+
+			.button {
+				transition: 0.6s ease-in-out;
+				display: inline-block;
+				&:hover {
+					color: $primaryMain;
+					background-color: $white;
+				}
+			}
+		}
+	}
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	color: $secondaryMain;
+}
+.emptyContainer {
+	max-width: 70rem;
+	margin: auto;
+	width: 100%;
+	padding: 0 2rem;
+	@include flex(column, center, center);
+	h3 {
+		color: $secondaryMain;
+		margin-bottom: 1rem;
+		text-align: center;
+	}
+	p {
+		text-align: center;
+	}
+	margin-bottom: 5rem;
+}
+.machine-catalog {
+	position: relative;
+	padding-bottom: 10rem;
+	max-width: 130rem;
+	margin: auto;
+	.machine-catalog-container {
+		position: relative;
+		margin: 0 5.5rem;
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		row-gap: 3rem;
+		column-gap: 3rem;
+		grid-auto-flow: row;
+		transition: all ease-in-out 0.3s;
+		justify-items: center;
+		@include responsive(smallerDesktop, 0) {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+		@include responsive(biggerTablet, 0) {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+		@include responsive(tablet, 0) {
+			margin: 0;
+			grid-template-columns: repeat(1, minmax(0, 1fr));
+		}
+		&.empty {
+			@include flex(row, center, center);
+		}
+		.machine-catalog-card {
+			@include flex(column, flex-start, flex-start);
+			min-height: 18rem;
+			background-size: cover;
+			position: relative;
+			z-index: 1;
+			box-shadow: 0px 16px 24px rgba(183, 183, 183, 0.14), 0px 6px 30px rgba(183, 183, 183, 0.12), 0px 8px 10px rgba(183, 183, 183, 0.2);
+			background: $white;
+			width: 100%;
+			transition: all ease-in-out 0.3s;
+			@include responsive(tablet, 0) {
+				max-width: 20rem;
+			}
+			.overlay {
+				display: block;
+				position: relative;
+				width: 100%;
+				height: 15rem;
+				overflow: hidden;
+				img {
+					height: 100%;
+					width: 100%;
+				}
+			}
+
+			h4 {
+				max-width: 85%;
+				word-wrap: break-word;
+				display: block;
+				position: relative;
+				height: 25%;
+				margin: 1rem 1rem;
+				@include responsive(tablet, 0) {
+					margin: 1rem 1rem 1rem 1rem;
+				}
+			}
+			&:hover {
+				transform: scale3d(1.006, 1.006, 1);
+				box-shadow: 0px 24px 50px rgba(183, 183, 183, 0.3), 0px 9px 50px rgba(183, 183, 183, 0.28), 0px 11px 30px rgba(183, 183, 183, 0.36);
+			}
+		}
+	}
+}
+
+/* .wrapper {
+  position: relative;
+  margin: 0 auto;
+  width: 100rem;
+  @include responsive(smallerDesktop, 0) {
+    width: 90%;
+  }
+} */
