@@ -30,7 +30,7 @@ const loadModel = async () => {
 	try {
 		console.log("Model loading...");
 		// Load a pre-trained object detection model (EfficientDet)
-		model = await tfconv.loadGraphModel("file://./models/brain_MD_V1_640x640/model.json");
+		model = await tfconv.loadGraphModel("file://./models/brain_new/model.json");
 		/*
 		model = await tfconv.loadGraphModel(
 			"https://raw.githubusercontent.com/hugozanini/TFJS-object-detection/master/models/kangaroo-detector/model.json"
@@ -73,14 +73,15 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 
 		const predictions = await model.executeAsync(tensor);
 
-		const boundingBoxesTensor = predictions[6]; //6
+		const boundingBoxesTensor = predictions[5]; //6
 		const boundingBoxes = await boundingBoxesTensor.arraySync();
 
-		const confidenceScoresTensor = predictions[4]; //7
+		const confidenceScoresTensor = predictions[6]; //4
 		const confidenceScores = confidenceScoresTensor.arraySync();
 
-		console.log(confidenceScores);
-		const confidenceThreshold = 0.7;
+		console.log(predictions);
+		const sliderValue = req.body.sliderValue / 100;
+		const confidenceThreshold = sliderValue;
 
 		//const classesTensor = predictions[1];
 		//const classes = classesTensor.dataSync();
@@ -145,12 +146,14 @@ app.post("/api/identify-object", upload.single("image"), async (req, res) => {
 		//console.log(uniqueBoundingBoxes);
 		//console.log(uniqueConfidenceScores);
 		//console.log(uniqueLabels);
+		//console.log(predictions);
 
 		if (filteredBoundingBoxes.length > 0) {
 			console.log("Uspech!!!!!!!!!!!!!!!!");
 			res.json({ success: true, uniqueBoundingBoxes, uniqueConfidenceScores, uniqueLabels });
 		} else {
 			console.log("Zhoda sa nenasla");
+			res.status(500).json({ success: false, message: "Error identifying object" });
 		}
 	} catch (error) {
 		console.error(error);

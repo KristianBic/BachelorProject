@@ -388,7 +388,7 @@
 
 	.statistics {
 		position: relative;
-		background-color: $primaryMain;
+		background-color: #baa496;
 		min-height: 14rem;
 		@include flex(row, center, center);
 
@@ -429,7 +429,7 @@
 						position: relative;
 						width: 0.1rem;
 						height: 8rem;
-						background: $primaryMain;
+						background: #baa496;
 						margin: 0;
 					}
 				}
@@ -691,6 +691,7 @@
 	margin: auto;
 	width: 100%;
 	padding: 0 2rem;
+	padding-bottom: 1rem;
 	//position: relative;
 	@include flex(row, center, center);
 	gap: 1rem;
@@ -725,4 +726,8 @@
 }
 .detectedImage {
 	@include flex(row, center, center);
+}
+.redErr {
+	font-weight: bold;
+	color: #c52e2e !important;
 }

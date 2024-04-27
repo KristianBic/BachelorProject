@@ -1,0 +1,425 @@
+@import "./variables";
+@import "./mixins";
+@import "./general";
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+.body {
+	position: relative;
+	width: 100%;
+	min-height: calc(100vh - 25rem);
+
+	.contact {
+		position: relative;
+		margin-bottom: 4rem;
+		max-width: 130rem;
+		margin: auto;
+
+		.contact-container {
+			@include flex(row, center, center);
+			margin: 0 5.5rem;
+			position: relative;
+
+			@include responsive(biggerTablet, 0) {
+				flex-wrap: wrap;
+			}
+
+			@include responsive(tablet, 0) {
+				margin: 0 5.5rem;
+			}
+
+			@include responsive(mobile, 0) {
+				margin: 0 1.25rem;
+			}
+
+			.contact-container-left {
+				position: relative;
+				padding: 2rem 1.5rem;
+				background: $primaryMain;
+				color: $white;
+
+				@include responsive(smallerDesktop, 0) {
+					flex-basis: 50%;
+				}
+
+				@include responsive(biggerTablet, 0) {
+					flex-basis: 100%;
+				}
+
+				.mail {
+					position: absolute;
+
+					@include responsive(smallerDesktop, 0) {
+						opacity: 0.3;
+					}
+
+					&.one {
+						right: -3rem;
+						top: -4rem;
+						transform: rotate(-90deg);
+
+						@include responsive(tablet, 0) {
+							display: none;
+						}
+					}
+
+					&.two {
+						left: -5rem;
+						bottom: -5rem;
+						transform: rotate(-80deg);
+
+						@include responsive(tablet, 0) {
+							display: none;
+						}
+					}
+
+					&.three {
+						bottom: 7rem;
+						right: 14rem;
+
+						@include responsive(tablet, 0) {
+							right: 5%;
+						}
+					}
+
+					&.four {
+						bottom: 2rem;
+						right: 2rem;
+						transform: rotate(-60deg);
+
+						@include responsive(tablet, 0) {
+							display: none;
+						}
+					}
+				}
+
+				p {
+					margin: 2rem 0;
+				}
+
+				h3 {
+					color: $white;
+					font-size: 1.5rem;
+					line-height: 1.75rem;
+					letter-spacing: 0.18px;
+					font-style: normal;
+					font-weight: normal;
+
+					@include responsive(mobile, 0) {
+						font-size: 1.25rem;
+						line-height: 1.5rem;
+						letter-spacing: 0.15px;
+						text-transform: uppercase;
+					}
+				}
+
+				ul {
+					.li-group {
+						list-style: none;
+						margin-bottom: 1rem;
+
+						&:last-child {
+							margin-bottom: 0;
+						}
+
+						li {
+							text-transform: none;
+							font-style: normal;
+							font-weight: normal;
+							letter-spacing: 0.8px;
+							color: $white;
+							display: flex;
+							margin-top: 0.4rem;
+							font-family: Russo One;
+							font-size: 1rem;
+
+							&:before {
+								position: relative;
+								margin-right: 0.5rem;
+								left: 0;
+								width: 24px;
+								height: 24px;
+							}
+						}
+
+						.li-caption {
+							padding: 0;
+							margin: 0;
+							letter-spacing: 0.4px;
+							font-family: $fontText;
+							font-size: 0.75rem;
+							color: $white;
+							opacity: 0.7;
+							font-weight: 500;
+
+							&:before {
+								visibility: hidden;
+								height: 0;
+							}
+						}
+
+						&.one {
+							li {
+								&:before {
+									//content: url("../../assets/image/icons/location.svg");
+									content: url("../js/assets/image/icons/location.svg");
+									//content: attr(data-base_url url);
+								}
+							}
+						}
+
+						&.two {
+							li {
+								&:before {
+									content: url("../js/assets/image/icons/CardDouble.svg");
+								}
+							}
+						}
+
+						&.three {
+							li {
+								&:before {
+									content: url("../js/assets/image/icons/User.svg");
+								}
+							}
+						}
+
+						&.four {
+							li {
+								&:before {
+									content: url("../js/assets/image/icons/ico.svg");
+								}
+							}
+						}
+
+						&.five {
+							li {
+								&:before {
+									content: url("../js/assets/image/icons/icDHP.svg");
+								}
+							}
+						}
+					}
+				}
+			}
+
+			.contact-container-right {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				row-gap: 1.5rem;
+				column-gap: 1.5rem;
+				grid-auto-flow: row;
+				transition: all ease-in-out 0.3s;
+				padding: 2rem 1.5rem;
+				box-shadow: 0px 16px 40px rgba(108, 108, 108, 0.2);
+				flex-basis: 50%;
+
+				@include responsive(biggerTablet, 0) {
+					flex-basis: 100%;
+				}
+
+				@include responsive(tablet, 0) {
+					//padding: 10% 10%;
+					padding: 2rem 1.5rem;
+				}
+
+				.input-block {
+					&.one {
+						@include responsive(tablet, 0) {
+							grid-column-start: 1;
+							grid-column-end: 3;
+						}
+					}
+
+					&.two {
+						grid-column-start: 1;
+						grid-column-end: 3;
+					}
+
+					label {
+						white-space: nowrap;
+						font-family: $fontText;
+						font-size: 1rem;
+						font-weight: 500;
+						line-height: 1.5rem;
+						letter-spacing: 0.5px;
+						display: block;
+						margin-top: 0.7rem;
+						width: 100%;
+
+						@include responsive(tablet, 0) {
+							width: 100%;
+						}
+					}
+
+					select {
+						resize: none;
+						width: 100%;
+						letter-spacing: 0.5px;
+						font-family: $fontText;
+						font-size: 0.75rem;
+						margin-top: 0.2rem;
+						padding: 0.5rem;
+						display: block;
+						background: $white;
+						border: 1px solid $primaryVariant;
+						box-shadow: 2px 2px $primaryVariant;
+						outline: none;
+						transition: 0.3s;
+						color: $secondaryMain;
+
+						option {
+							background-color: $primaryMain;
+							padding: 0 5rem;
+							color: $white;
+						}
+
+						option:disabled {
+							background-color: $primaryMain;
+						}
+
+						&:focus {
+							border: 1px solid $primaryMain;
+							box-shadow: 2px 2px $primaryMain;
+
+							&::placeholder {
+								visibility: hidden;
+							}
+						}
+
+						&::placeholder {
+							letter-spacing: 0.5px;
+							font-family: $fontText;
+							font-size: 0.75rem;
+							color: #949494;
+						}
+					}
+
+					textarea {
+						height: 6rem;
+						resize: none;
+						width: 100%;
+						letter-spacing: 0.5px;
+						font-family: $fontText;
+						font-size: 0.75rem;
+						margin-top: 0.2rem;
+						padding: 0.5rem;
+						display: block;
+						background: $white;
+						border: 1px solid $primaryVariant;
+						box-shadow: 2px 2px $primaryVariant;
+						outline: none;
+						transition: 0.3s;
+						color: $secondaryMain;
+
+						@include responsive(tablet, 0) {
+							width: 100%;
+						}
+
+						&:focus {
+							border: 1px solid $primaryMain;
+							box-shadow: 2px 2px $primaryMain;
+
+							&::placeholder {
+								visibility: hidden;
+							}
+						}
+
+						&::placeholder {
+							letter-spacing: 0.5px;
+							font-family: $fontText;
+							font-size: 0.75rem;
+							color: #949494;
+						}
+					}
+
+					input {
+						width: 100%;
+						letter-spacing: 0.5px;
+						font-family: $fontText;
+						font-size: 0.75rem;
+						margin-top: 0.2rem;
+						color: $secondaryMain;
+						padding: 0.5rem;
+						display: block;
+						background: $white;
+						border: 1px solid $primaryVariant;
+						box-shadow: 2px 2px $primaryVariant;
+						outline: none;
+						transition: 0.3s;
+
+						@include responsive(tablet, 0) {
+							width: 100%;
+						}
+
+						&:focus {
+							border: 1px solid $primaryMain;
+							box-shadow: 2px 2px $primaryMain;
+
+							&::placeholder {
+								visibility: hidden;
+							}
+						}
+
+						&::placeholder {
+							letter-spacing: 0.5px;
+							font-family: $fontText;
+							font-size: 0.75rem;
+							color: #949494;
+						}
+					}
+
+					.err {
+						border: 1px solid #c52e2e !important;
+						box-shadow: 2px 2px #c52e2e !important;
+					}
+				}
+
+				.form-button {
+					grid-column-start: 1;
+					grid-column-end: 3;
+					transition: 0.6s;
+					margin: 2rem 0;
+					width: 100%;
+					padding: 0.3rem 2.25rem;
+
+					@include responsive(tablet, 0) {
+						width: 100%;
+					}
+
+					&:hover {
+						background-color: transparent;
+						color: $primaryMain;
+					}
+				}
+			}
+		}
+	}
+
+	.map {
+		position: relative;
+		max-width: calc(1305px + 11rem);
+		margin: auto;
+
+		.map-container {
+			margin-bottom: 6rem;
+			margin-top: 2rem;
+			padding: 0 5.5rem;
+
+			@include responsive(tablet, 0) {
+				padding: 0 5.5rem;
+			}
+
+			@include responsive(mobile, 0) {
+				padding: 0 1.25rem;
+			}
+
+			iframe {
+				width: 100%;
+			}
+		}
+	}
+}

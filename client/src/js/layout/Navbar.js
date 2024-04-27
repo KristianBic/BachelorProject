@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 //import { FaBars } from "react-icons/fa";
 //import { GrClose } from "react-icons/gr";
-//import logo from "../assets/image/svgs/Logo.svg";
+import logo from "../assets/image/svgs/med_logo.svg";
 
 import "../assets/style/Navbar_style.css";
 
@@ -23,10 +23,7 @@ const Navbar = () => {
 	return (
 		<header className={sticky ? "header flex sticky header-scrolled" : "header flex"}>
 			<Link to={"/"}>
-				Home
-				{
-					//<img className="header-logo" src={logo} alt="SVG logo image" />
-				}
+				<img className="header-logo" src={logo} alt="SVG logo image" />
 			</Link>
 			<nav className={click ? "open" : ""}>
 				<div className="mobile-nav-open" onClick={handleClick}>
@@ -39,7 +36,7 @@ const Navbar = () => {
 						<a>Služby</a>
 						<ul className="dropdown-content">
 							<li>
-								<Link to={"/"}>Detekcia nadoru na mozgu</Link>
+								<Link to={"/detection"}>Detekcia nadoru na mozgu</Link>
 							</li>
 						</ul>
 					</li>

@@ -1,5 +1,5 @@
 import React from "react";
-import videoVrtnePrace from "../assets/image/images/brain.jpg";
+import videoVrtnePrace from "../assets/image/images/detec_hero.jpg";
 import mainLogo from "../assets/image/images/marpal_png.png";
 import { Link } from "react-router-dom";
 import Rectangle from "../assets/image/svgs/HeroRectangleBigger.svg";
@@ -27,9 +27,6 @@ export default () => {
 						<div className="text" data-slide_number="1">
 							<h1>Detekcia nádoru na mozgu</h1>
 							<p>Poskytujeme prvotriednu a profesionálnu detekciu medicínskych snímok pre maximálnu spokojnosť zákazníka.</p>
-							<Link className="button" to="/">
-								Zisti viac
-							</Link>
 						</div>
 					</div>
 				</div>

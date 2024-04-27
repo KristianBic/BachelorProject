@@ -34,18 +34,8 @@ const Footer = () => {
 					<h4>Naše služby</h4>
 					<ul>
 						<li>
-							<Link className="link" to="/">
-								lorem Ipsu
-							</Link>
-						</li>
-						<li>
-							<Link className="link" to="/">
-								lorem Ipsu
-							</Link>
-						</li>
-						<li>
-							<Link className="link" to="/">
-								lorem Ipsu
+							<Link className="link" to="/detekcia">
+								Detekcia nádoru na mozgu
 							</Link>
 						</li>
 					</ul>
@@ -54,12 +44,12 @@ const Footer = () => {
 					<h4>Sociálne siete</h4>
 					<ul>
 						<li>
-							<a className="link" href="https://www.instagram.com/_vrtanie_studni_/">
+							<a className="link" href="https://www.instagram.com/kristian_bicanovsky/">
 								Instagram
 							</a>
 						</li>
 						<li>
-							<a className="link" href="https://www.facebook.com/Marpal-102560028949170">
+							<a className="link" href="https://www.facebook.com/kristian.bicanovsky/">
 								Facebook
 							</a>
 						</li>

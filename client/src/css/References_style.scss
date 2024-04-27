@@ -1,0 +1,111 @@
+@import "./variables";
+@import "./mixins";
+@import "./general";
+
+.body {
+	position: relative;
+	width: 100%;
+	min-height: calc(100vh - 25rem);
+	.references-catalog {
+		position: relative;
+		padding-bottom: 10rem;
+		max-width: 130rem;
+		margin: auto;
+		.quote {
+			position: absolute;
+
+			&.one {
+				top: -10rem;
+				right: 0;
+				@include responsive(mobile, 0) {
+					display: none;
+				}
+			}
+
+			&.two {
+				bottom: 5rem;
+				left: 0;
+				transform: rotate(180deg);
+				@include responsive(mobile, 0) {
+					display: none;
+				}
+			}
+		}
+
+		.references-catalog-container {
+			position: relative;
+			margin: 0 5.5rem;
+			display: grid;
+
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			row-gap: 4rem;
+			column-gap: 4rem;
+			grid-auto-flow: row;
+			transition: all ease-in-out 0.3s;
+
+			.references-catalog-card {
+				z-index: 1;
+				min-height: 10rem;
+				position: relative;
+				border-top: 3.5px solid $primaryMain;
+				box-shadow: 0px 16px 24px rgba(183, 183, 183, 0.14), 0px 6px 30px rgba(183, 183, 183, 0.12), 0px 8px 10px rgba(183, 183, 183, 0.2);
+				background: $white;
+				width: 100%;
+				transition: all ease-in-out 0.3s;
+				@include flex(column, center, center);
+
+				@include responsive(tablet, 0) {
+					max-width: 20rem;
+				}
+				&.none {
+					visibility: hidden;
+					@include responsive(smallerDesktop, 0) {
+						display: none;
+					}
+				}
+				img {
+					max-width: 100%;
+					max-height: 100%;
+				}
+
+				p {
+					position: absolute;
+					font-size: 0.75rem;
+					font-weight: 300;
+					bottom: 0.5rem;
+					//margin-top: 1rem;
+				}
+
+				&:hover {
+					transform: scale3d(1.006, 1.006, 1);
+					box-shadow: 0px 24px 50px rgba(183, 183, 183, 0.3), 0px 9px 50px rgba(183, 183, 183, 0.28),
+						0px 11px 30px rgba(183, 183, 183, 0.36);
+				}
+			}
+			@include responsive(smallerDesktop, 0) {
+				grid-template-columns: repeat(3, minmax(0, 1fr));
+				.references-catalog-card {
+					&.centerCard {
+						grid-column-start: 2;
+						grid-row-start: 4;
+					}
+				}
+			}
+
+			@include responsive(biggerTablet, 0) {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				.references-catalog-card {
+					&.centerCard {
+						grid-column-start: unset;
+						grid-row-start: unset;
+					}
+				}
+			}
+			@include responsive(tablet, 0) {
+				margin: 0 1.25rem;
+				grid-template-columns: repeat(1, minmax(0, 1fr));
+				justify-items: center;
+			}
+		}
+	}
+}
