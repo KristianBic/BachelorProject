@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-//import { FaBars } from "react-icons/fa";
-//import { GrClose } from "react-icons/gr";
+import { FaBars } from "react-icons/fa";
+import { GrClose } from "react-icons/gr";
 import logo from "../assets/image/svgs/med_logo.svg";
 
 import "../assets/style/Navbar_style.css";
@@ -27,13 +27,12 @@ const Navbar = () => {
 			</Link>
 			<nav className={click ? "open" : ""}>
 				<div className="mobile-nav-open" onClick={handleClick}>
-					{
-						//{click ? <GrClose size={30} /> : <FaBars size={30} />}
-					}
+					{click ? <GrClose size={30} /> : <FaBars size={30} />}
 				</div>
 				<ul id="primary-navigation" className="primary-navigation flex">
 					<li id="nav_services" className="nav-services">
-						<a>Služby</a>
+						<Link to={"/detection"}>Služby</Link>
+
 						<ul className="dropdown-content">
 							<li>
 								<Link to={"/detection"}>Detekcia nadoru na mozgu</Link>

@@ -49,7 +49,7 @@ const Login = () => {
 			</Helmet>
 			{success ? (
 				<section>
-					<Navigate to="/nastavenia" />
+					<Navigate to="/" />
 				</section>
 			) : (
 				<div className="login-body">

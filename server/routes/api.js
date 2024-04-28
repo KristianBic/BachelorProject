@@ -1,7 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const objectIdentificationController = require("../controllers/objectIdentificationController");
+const { storage } = require("../controllers/objectIdentification"); // Import storage
 
-router.post("/identifyObject", objectIdentificationController.identifyObject);
+const multer = require("multer");
+const upload = multer({ storage: storage }); // Define multer storage
+
+const { handleObjectIdentification } = require("../controllers/objectIdentification");
+
+router.post("/identify-object", upload.single("image"), handleObjectIdentification);
 
 module.exports = router;

@@ -4,16 +4,16 @@ import Footer from "../../layout/Footer";
 import { SimpleHero } from "../../layout/SimpleHero";
 import { ReferencesCard } from "./ReferencesCard";
 
-import ztasLogo from "../../assets/image/images/gal_box.png";
-import subterraLogo from "../../assets/image/images/gal_box.png";
-import knmLogo from "../../assets/image/images/gal_box.png";
-import omniaLogo from "../../assets/image/images/gal_box.png";
-import intermarketLogo from "../../assets/image/images/gal_box.png";
-import kinexLogo from "../../assets/image/images/gal_box.png";
-import enzaLogo from "../../assets/image/images/gal_box.png";
-import techstavLogo from "../../assets/image/images/gal_box.png";
+import ztasLogo from "../../assets/image/images/image_with_boxes_7.png";
+import subterraLogo from "../../assets/image/images/image_with_boxes_1.png";
+import knmLogo from "../../assets/image/images/image_with_boxes_2.png";
+import omniaLogo from "../../assets/image/images/image_with_boxes_3.png";
+import intermarketLogo from "../../assets/image/images/image_with_boxes_4.png";
+import kinexLogo from "../../assets/image/images/image_with_boxes_5.png";
+import enzaLogo from "../../assets/image/images/image_with_boxes_6.png";
+import techstavLogo from "../../assets/image/images/image_with_boxes_1.png";
 import developaLogo from "../../assets/image/images/gal_box.png";
-import montezLogo from "../../assets/image/images/gal_box.png";
+import montezLogo from "../../assets/image/images/image_with_boxes_4.png";
 
 import "../../../css/References_style.scss";
 

@@ -1,16 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { Helmet } from "react-helmet";
-import axios from "axios";
 import Navbar from "../../layout/Navbar";
-
 import Footer from "../../layout/Footer";
-import "../../../css/Home_style.scss";
-import galleryBackgroundImage from "../../assets/image/images/gallery_home-page.png";
-import Main_Hero from "../../layout/Main_Hero";
+import MainHero from "../../layout/Main_Hero";
 import Services from "./Services";
 import Statistics from "./Statistics";
-import Gallery from "./Gallery";
 import ContactUS from "../../layout/ContactUS";
+import "../../../css/Home_style.scss";
 
 const Home = () => {
 	return (
@@ -21,10 +17,9 @@ const Home = () => {
 			</Helmet>
 			<Navbar />
 			<div className="body">
-				<Main_Hero />
+				<MainHero />
 				<Services />
 				<Statistics />
-
 				<ContactUS />
 			</div>
 			<Footer />

@@ -11,21 +11,21 @@ const Services = () => {
 			<h2>Detekcia objektov na medicínskych snímkach</h2>
 			<div className="services-container">
 				<ServiceCard
-					link="/"
+					link="/detection"
 					imageSrc={vrtnePrace}
 					imageAlt="Vŕtanie studne"
 					heading="Analýza a diagnostika obrazu"
 					description="Naše pokročilé algoritmy analyzuju medicínske obrazy pri asistovaní diagnózy"
 				/>
 				<ServiceCard
-					link="/"
+					link="/detection"
 					imageSrc={stavebnePrace}
 					imageAlt="Stavebné práce"
 					heading="Precizia diagnózy"
 					description="Ponúkame preciznú diagnózu medicínskych snímok."
 				/>
 				<ServiceCard
-					link="/"
+					link="/detection"
 					imageSrc={vykopovePrace}
 					imageAlt="Výkopové práce"
 					heading="Detekcia tumoru na mozgu"
